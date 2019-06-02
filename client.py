@@ -148,19 +148,12 @@ def enemy_moves(board, player):
     return  move_list
 
 def create_all_moves(initial_board, current_player):
-    if current_player ==1:
-        enemy =2
-    else:
-        enemy =1
     current_player_moves = possible_moves_reworked(initial_board,current_player)
-    current_enemy_moves = enemy_moves(initial_board, current_player)
     next_moves = []
     for player_move in current_player_moves:
-        for enemy_move in current_enemy_moves:
-            next_board = deepcopy(initial_board)
-            next_board[player_move] = current_player
-            next_board[enemy_move] = enemy
-            next_moves.append(next_board)
+        next_board = deepcopy(initial_board)
+        next_board[player_move] = current_player
+        next_moves.append(next_board)
     return next_moves
 
 
@@ -177,11 +170,9 @@ def create_scores(next_moves,scoreboard):
 
 
 
-
-
-
 def minimax(depth, nodeIndex, player, board, alpha, beta):
-    if depth == 3:
+    if depth == 1:
+        print("nodeIndex: {}".format(nodeIndex))
         return board[nodeIndex]
 
     if player == 1:
@@ -231,13 +222,18 @@ def on_ready(data):
     #movement = randint(0,63)
 
     #calcular todas las jugadas
-    all_moves = possible_moves_reworked(data['board'],data['player_turn_id'])
+    all_moves = create_all_moves(data['board'],data['player_turn_id'])
     
     scores = create_scores(all_moves, pointBoard)
 
-    alpha_beta = minimax(0, 0, data['player_turn_id'], scores, float("-inf"), float("inf"))
-    
-    wheretomove = scores.index(alpha_beta)
+    print("scores: {}".format(scores))
+
+    if(len(scores) > 1):
+        alpha_beta = minimax(0, 0, data['player_turn_id'], scores, float("-inf"), float("inf"))
+        wheretomove = scores.index(alpha_beta)
+    else:
+        #solo 1 jugada
+        wheretomove = 0
 
     #if red_flag == wheretomove:
         #print("hello there general kenobi")
