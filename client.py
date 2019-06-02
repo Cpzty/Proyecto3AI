@@ -258,7 +258,10 @@ def on_ready(data):
     
     if red_flag == wheretomove:
         print("hello there general kenobi")
-        movement = choice(playerwillmove)
+        if(playerwillmove):
+            movement = choice(playerwillmove)
+        else:
+            movement = randint(0,64)
         
 
     print("red_flag: {0}, wheretomove: {1}".format(red_flag,wheretomove))
